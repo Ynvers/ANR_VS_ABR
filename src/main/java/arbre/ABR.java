@@ -38,7 +38,7 @@ public class ABR<E> extends AbstractCollection<E>{
 
 			Noeud p = this.pere;
 			Noeud enfant = this;
-			while(p != null && enfant == pere.droit){
+			while(p != null && enfant == p.droit){
 				enfant = p;
 				p = p.pere;
 			}
@@ -51,8 +51,26 @@ public class ABR<E> extends AbstractCollection<E>{
 	}
 
 	@Override
+	public Iterator<E> iterator(){
+		return new ABRIterator();
+	}
+	@Override
 	public int	size()
 	{
 		return taille;
+	}
+
+	private class ABRIterator implements Iterator<E>{
+		public boolean hasNext(){
+			return false;
+		}
+
+		public E next(){
+			return null;
+		}
+
+		public void remove(){
+
+		}
 	}
 }
