@@ -8,15 +8,15 @@ public class ANR<E> extends AbstractCollection<E>{
 
 	@Override
 	public Iterator<E> iterator(){
-		return new ABRIterator();
+		return new ANRIterator();
 	}
 
 	public int	size()
 	{
 		return hauteur;
 	}
-	
-	private class ABRIterator implements Iterator<E>{
+
+	private class ANRIterator implements Iterator<E>{
 		public boolean hasNext(){
 			return false;
 		}
