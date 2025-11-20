@@ -32,7 +32,17 @@ public class ABR<E> extends AbstractCollection<E>{
 		}
 
 		Noeud suivant(){
-			return this.droit;
+			if (this.droit != null){
+				return this.droit.minimum();
+			}
+
+			Noeud p = this.pere;
+			Noeud enfant = this;
+			while(p != null && enfant == pere.droit){
+				enfant = p;
+				p = p.pere;
+			}
+			return p;
 		}
 	}
 
