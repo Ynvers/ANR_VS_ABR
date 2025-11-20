@@ -1,0 +1,10 @@
+les fonctions à avoir : 
+- add
+- search
+- delete
+- parc_inf
+- parc_pre
+- parc suf
+- max
+- min
+- size
