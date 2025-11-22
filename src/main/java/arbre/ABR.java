@@ -46,9 +46,21 @@ public class ABR<E> extends AbstractCollection<E>{
 		}
 	}
 
-	public ABR(){
-
+	public ABR(E valeur){
+		this.racine = new Noeud(valeur);
+		this.taille = 1;
 	}
+
+	public ABR(){
+		this.racine = null;
+		this.taille = 0;
+	}
+
+	public ABR(Comparator cmp){
+		this.racine = null;
+		this.taille = 0;
+		this.cmp = cmp;
+	} 
 
 	@Override
 	public Iterator<E> iterator(){
@@ -72,5 +84,42 @@ public class ABR<E> extends AbstractCollection<E>{
 		public void remove(){
 
 		}
+	}
+
+	@Override
+	public String toString() {
+		StringBuffer buf = new StringBuffer();
+		toString(racine, buf, "", maxStrLen(racine));
+		return buf.toString();
+	}
+
+	private void toString(Noeud x, StringBuffer buf, String path, int len) {
+		if (x == null)
+			return;
+		toString(x.droit, buf, path + "D", len);
+		for (int i = 0; i < path.length(); i++) {
+			for (int j = 0; j < len + 6; j++)
+				buf.append(' ');
+			char c = ' ';
+			if (i == path.length() - 1)
+				c = '+';
+			else if (path.charAt(i) != path.charAt(i + 1))
+				c = '|';
+			buf.append(c);
+		}
+		buf.append("-- " + x.valeur.toString());
+		if (x.gauche != null || x.droit != null) {
+			buf.append(" --");
+			for (int j = x.valeur.toString().length(); j < len; j++)
+				buf.append('-');
+			buf.append('|');
+		}
+		buf.append("\n");
+		toString(x.gauche, buf, path + "G", len);
+	}
+
+	private int maxStrLen(Noeud x) {
+		return x == null ? 0 : Math.max(x.valeur.toString().length(),
+				Math.max(maxStrLen(x.gauche), maxStrLen(x.droit)));
 	}
 }
