@@ -7,7 +7,10 @@ import java.util.Iterator;
 public class ANR<E> extends AbstractCollection<E>{
 	private Noeud					racine;
 	private int						taille;
+	private Noeud					feuillNoeud;
 	private Comparator<? super E>	cmp;
+	private static final boolean	ROUGE = true;
+	private static final boolean	NOIR = false;
 
 	private class Noeud {
 		E		valeur;
@@ -18,29 +21,36 @@ public class ANR<E> extends AbstractCollection<E>{
 
 		Noeud(E valeur){
 			this.valeur = valeur;
-			this.droit = null;
-			this.gauche = null;
-			this.pere = null;
-			this.couleur = false;
+			this.droit = feuillNoeud;
+			this.gauche = feuillNoeud;
+			this.pere = feuillNoeud;
+			this.couleur = ROUGE;
+		}
+
+		//Constructeur pour le noeud nul
+		Noeud(){
+			this.valeur = null;
+			this.droit = this;
+			this.gauche = this;
+			this.pere = this;
+			this.couleur = NOIR;
 		}
 
 		Noeud	minimum(){
 			Noeud	mini;
 			mini = this;
-			while (mini.gauche != null){
+			while (mini.gauche != feuillNoeud)
 				mini = mini.gauche;
-			}
 			return mini;
 		}
 
 		Noeud	suivant(){
-			if (this.droit != null){
+			if (this.droit != feuillNoeud)
 				return this.droit.minimum();
-			}
 
 			Noeud	p = this.pere;
 			Noeud	enfant = this;
-			while(p != null && enfant == p.droit){
+			while(p != feuillNoeud && enfant == p.droit){
 				enfant = p;
 				p = p.pere;
 			}
@@ -49,17 +59,21 @@ public class ANR<E> extends AbstractCollection<E>{
 	}
 
 	public ANR(E valeur){
+		this.feuillNoeud = new Noeud();
 		this.racine = new Noeud(valeur);
+		this.racine.couleur = NOIR;
 		this.taille = 1;
 	}
 
 	public ANR(){
-		this.racine = null;
+		this.feuillNoeud = new Noeud();
+		this.racine = this.feuillNoeud;
 		this.taille = 0;
 	}
 
 	public ANR(Comparator<? super E> cmp){
-		this.racine = null;
+		this.feuillNoeud = new Noeud();
+		this.racine = this.feuillNoeud;
 		this.taille = 0;
 		this.cmp = cmp;
 	}
@@ -69,8 +83,9 @@ public class ANR<E> extends AbstractCollection<E>{
 		Noeud new_noeud = new Noeud(nouvelle_valeur);
 		
 		// Cas où l'arbre est vide
-		if (this.racine == null) {
+		if (this.racine == this.feuillNoeud) {
 			this.racine = new_noeud;
+			this.racine.couleur = NOIR;
 			this.taille = 1;
 			return true;
 		}
@@ -82,7 +97,7 @@ public class ANR<E> extends AbstractCollection<E>{
 				return false;
 			}
 			else if (order > 0){
-				if (courant.droit == null){
+				if (courant.droit == this.feuillNoeud){
 					courant.droit = new_noeud;
 					new_noeud.pere = courant;
 					this.taille++;
@@ -91,7 +106,7 @@ public class ANR<E> extends AbstractCollection<E>{
 				courant = courant.droit;
 			}
 			else if (order < 0) {
-				if (courant.gauche == null){
+				if (courant.gauche == this.feuillNoeud){
 					courant.gauche = new_noeud;
 					new_noeud.pere = courant;
 					this.taille++;
@@ -109,10 +124,9 @@ public class ANR<E> extends AbstractCollection<E>{
 	@SuppressWarnings("unchecked")
 	public boolean	contains(Object obj){
 		E element = (E) obj;
-		// Noeud new_noeud = new Noeud((E) obj);
 		Noeud courant = this.racine;
 
-		while (courant != null){
+		while (courant != this.feuillNoeud){
 			int	order = compare(element, courant.valeur);
 			if (order == 0){
 				return true;
@@ -133,25 +147,24 @@ public class ANR<E> extends AbstractCollection<E>{
 		E element = (E) obj;
 		Noeud courant = racine;
 
-		while (courant != null) {
+		while (courant != this.feuillNoeud) {
 			int order = compare(element, courant.valeur);
 			if (order == 0) break;
 			if (order < 0) courant = courant.gauche; else courant = courant.droit;
 		}
+		if (courant == this.feuillNoeud) return false;
 
-		if (courant == null) return false;
-
-		if (courant.gauche != null && courant.droit != null) {
+		if (courant.gauche != this.feuillNoeud && courant.droit != this.feuillNoeud) {
 			Noeud succ = courant.droit.minimum();
 			courant.valeur = succ.valeur;
 			courant = succ;
 		}
 
-		Noeud child = (courant.gauche != null) ? courant.gauche : courant.droit;
-		if (child != null)
+		Noeud child = (courant.gauche != this.feuillNoeud) ? courant.gauche : courant.droit;
+		if (child != this.feuillNoeud)
 			child.pere = courant.pere;
 
-		if (courant.pere == null) {
+		if (courant.pere == this.feuillNoeud) {
 			racine = child;
 		} else if (courant == courant.pere.gauche) {
 			courant.pere.gauche = child;
@@ -226,7 +239,7 @@ public class ANR<E> extends AbstractCollection<E>{
 	}
 
 	private void toString(Noeud x, StringBuffer buf, String path, int len) {
-		if (x == null)
+		if (x == feuillNoeud)
 			return;
 		toString(x.droit, buf, path + "D", len);
 		for (int i = 0; i < path.length(); i++) {
@@ -239,8 +252,8 @@ public class ANR<E> extends AbstractCollection<E>{
 				c = '|';
 			buf.append(c);
 		}
-		buf.append("-- " + x.valeur.toString());
-		if (x.gauche != null || x.droit != null) {
+		buf.append("-- " + x.valeur.toString() + (x.couleur == ROUGE ? "(R)" : "(N)") );
+		if (x.gauche != feuillNoeud || x.droit != feuillNoeud) {
 			buf.append(" --");
 			for (int j = x.valeur.toString().length(); j < len; j++)
 				buf.append('-');
@@ -251,7 +264,7 @@ public class ANR<E> extends AbstractCollection<E>{
 	}
 
 	private int maxStrLen(Noeud x) {
-		return x == null ? 0 : Math.max(x.valeur.toString().length(),
+		return x == feuillNoeud ? 0 : Math.max(x.valeur.toString().length(),
 				Math.max(maxStrLen(x.gauche), maxStrLen(x.droit)));
 	}
 }

@@ -19,5 +19,8 @@ public class App {
 		System.out.println(arbre_entier.contains(10));
 		arbre_entier.remove(50);
 		System.out.println(arbre_entier);
+
+		ANR<Integer> rouge_noir = new ANR<>(10);
+		System.out.println(rouge_noir);
 	}
 }
