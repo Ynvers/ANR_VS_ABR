@@ -21,12 +21,12 @@ public class App {
 		System.out.println(arbre_entier);
 
 System.out.println("============Debut des test============");
-		ANR<Integer> rouge_noir = new ANR<>(10);
-		rouge_noir.add(30);
+		ANR<Integer> rouge_noir = new ANR<>(1);
+		rouge_noir.add(2);
+		rouge_noir.add(3);
+		rouge_noir.add(4);
 		rouge_noir.add(5);
-		rouge_noir.add(20);
-		// rouge_noir.add(40);
-		// rouge_noir.add(60);
+		rouge_noir.add(6);
 		System.out.println(rouge_noir);
 	}
 }
