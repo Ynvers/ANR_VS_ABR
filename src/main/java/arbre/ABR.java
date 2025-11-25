@@ -7,7 +7,7 @@ import java.util.Iterator;
 public class ABR<E> extends AbstractCollection<E>{
 	private Noeud racine;
 	private int	taille;
-	private final Comparator<? super E> cmp;
+	private final	Comparator<? super E> cmp;
 
 	private class Noeud {
 		E valeur;
