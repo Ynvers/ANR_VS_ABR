@@ -78,6 +78,100 @@ public class ANR<E> extends AbstractCollection<E>{
 		this.cmp = cmp;
 	}
 
+	private void	ajouterCorrection(Noeud new_noeud)
+	{
+		while(new_noeud.pere.couleur == ROUGE)
+		{
+			if (new_noeud.pere == new_noeud.pere.pere.gauche)
+			{
+				Noeud oncle = new_noeud.pere.pere.droit;
+				if (oncle.couleur == ROUGE)
+				{
+					new_noeud.pere.couleur = NOIR;
+					oncle.couleur = NOIR;
+					new_noeud.pere.pere.couleur = ROUGE;
+					new_noeud = new_noeud.pere.pere;
+				}
+				else
+				{
+					if (new_noeud == new_noeud.pere.droit)
+					{
+						new_noeud = new_noeud.pere;
+						rotationGauche(new_noeud);
+					}
+					new_noeud.pere.couleur = NOIR;
+					new_noeud.pere.pere.couleur = ROUGE;
+					rotationDroite(new_noeud.pere.pere);
+				}
+			}
+			else
+			{
+				Noeud oncle = new_noeud.pere.pere.gauche;
+				if (oncle.couleur == ROUGE)
+				{
+					new_noeud.pere.couleur = NOIR;
+					oncle.couleur = NOIR;
+					new_noeud.pere.pere.couleur = ROUGE;
+					new_noeud = new_noeud.pere.pere;
+				}
+				else
+				{
+					if (new_noeud == new_noeud.pere.gauche)
+					{
+						new_noeud = new_noeud.pere;
+						rotationGauche(new_noeud);
+					}
+					new_noeud.pere.couleur = NOIR;
+					new_noeud.pere.pere.couleur = ROUGE;
+					rotationDroite(new_noeud.pere.pere);
+				}
+			}
+		}
+		this.racine.couleur = NOIR;
+	}
+
+	private void	rotationGauche(Noeud courant)
+	{
+		Noeud filsDroit = courant.droit;
+		courant.droit = filsDroit.gauche;
+
+		if (filsDroit.gauche != this.feuillNoeud)
+			filsDroit.gauche.pere = courant;
+		filsDroit.pere = courant.pere;
+		if (courant.pere == null)
+		{
+			this.racine = filsDroit;
+		}else if (courant.pere.gauche == courant)
+		{
+			courant.pere.gauche = filsDroit;
+		}else{
+			courant.pere.droit = filsDroit;
+		}
+		filsDroit.gauche = courant;
+		courant.pere = filsDroit;
+	}
+
+	private void	rotationDroite(Noeud courant)
+	{
+		Noeud filsGauche = courant.gauche;
+		courant.gauche = filsGauche.droit;
+
+		if (filsGauche.droit != this.feuillNoeud)
+			filsGauche.droit.pere = courant;
+		filsGauche.pere = courant.pere;
+		if (courant.pere == null)
+		{
+			this.racine = filsGauche;
+		}else if (courant.pere.gauche == courant)
+		{
+			courant.pere.gauche = filsGauche;
+		}else{
+			courant.pere.droit = filsGauche;
+		}
+		filsGauche.droit = courant;
+		courant.pere = filsGauche;
+	}
+
 	@Override
 	public boolean	add(E nouvelle_valeur){
 		Noeud new_noeud = new Noeud(nouvelle_valeur);
@@ -100,7 +194,7 @@ public class ANR<E> extends AbstractCollection<E>{
 				if (courant.droit == this.feuillNoeud){
 					courant.droit = new_noeud;
 					new_noeud.pere = courant;
-					this.taille++;
+					ajouterCorrection(new_noeud);
 					return true;
 				}
 				courant = courant.droit;
@@ -109,7 +203,7 @@ public class ANR<E> extends AbstractCollection<E>{
 				if (courant.gauche == this.feuillNoeud){
 					courant.gauche = new_noeud;
 					new_noeud.pere = courant;
-					this.taille++;
+					ajouterCorrection(new_noeud);
 					return true;
 				}
 				courant = courant.gauche;
@@ -176,48 +270,6 @@ public class ANR<E> extends AbstractCollection<E>{
 		return true;
 	}
 
-	private void	rotationGauche(Noeud courant)
-	{
-		Noeud filsDroit = courant.droit;
-		courant.droit = filsDroit.gauche;
-
-		if (filsDroit.gauche != this.feuillNoeud)
-			filsDroit.gauche.pere = courant;
-		filsDroit.pere = courant.pere;
-		if (courant.pere == null)
-		{
-			this.racine = filsDroit;
-		}else if (courant.pere.gauche == courant)
-		{
-			courant.pere.gauche = filsDroit;
-		}else{
-			courant.pere.droit = filsDroit;
-		}
-		filsDroit.gauche = courant;
-		courant.pere = filsDroit;
-	}
-
-	private void	rotationDroite(Noeud courant)
-	{
-		Noeud filsGauche = courant.gauche;
-		courant.gauche = filsGauche.droit;
-
-		if (filsGauche.droit != this.feuillNoeud)
-			filsGauche.droit.pere = courant;
-		filsGauche.pere = courant.pere;
-		if (courant.pere == null)
-		{
-			this.racine = filsGauche;
-		}else if (courant.pere.gauche == courant)
-		{
-			courant.pere.gauche = filsGauche;
-		}else{
-			courant.pere.droit = filsGauche;
-		}
-		filsGauche.droit = courant;
-		courant.pere = filsGauche;
-	}
-
 	public int	get_taille(){
 		return this.taille;
 	}
@@ -254,10 +306,12 @@ public class ANR<E> extends AbstractCollection<E>{
 			dernier_retournee = null;
 		}
 
+		@Override
 		public boolean	hasNext(){
 			return prochain != null;
 		}
 
+		@Override
 		public E	next(){
 			if (prochain != null){
 				dernier_retournee = prochain;
@@ -267,6 +321,7 @@ public class ANR<E> extends AbstractCollection<E>{
 			return null;
 		}
 
+		@Override
 		public void	remove(){
 			ANR.this.remove(dernier_retournee.valeur);
 			dernier_retournee = null;

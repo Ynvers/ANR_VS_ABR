@@ -1,3 +1,7 @@
 target/
 #fichiers de log
 *.log
+.vscode
+bin/
+.settings/
+.project

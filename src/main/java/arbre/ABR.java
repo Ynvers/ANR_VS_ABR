@@ -7,7 +7,7 @@ import java.util.Iterator;
 public class ABR<E> extends AbstractCollection<E>{
 	private Noeud racine;
 	private int	taille;
-	private Comparator<? super E> cmp;
+	private final Comparator<? super E> cmp;
 
 	private class Noeud {
 		E valeur;
@@ -49,11 +49,13 @@ public class ABR<E> extends AbstractCollection<E>{
 	public ABR(E valeur){
 		this.racine = new Noeud(valeur);
 		this.taille = 1;
+		this.cmp = (e1, e2)->((Comparable<E>)e1).compareTo(e2);
 	}
 
 	public ABR(){
 		this.racine = null;
 		this.taille = 0;
+		this.cmp = (e1, e2)->((Comparable<E>)e1).compareTo(e2);
 	}
 
 	public ABR(Comparator<? super E> cmp){
@@ -75,7 +77,7 @@ public class ABR<E> extends AbstractCollection<E>{
 
 		Noeud courant = this.racine;
 		while (true) {
-			int order = compare(nouvelle_valeur, courant.valeur);
+			int order = this.cmp.compare(nouvelle_valeur, courant.valeur);
 			if (order == 0){
 				return false;
 			}
@@ -111,7 +113,7 @@ public class ABR<E> extends AbstractCollection<E>{
 		Noeud courant = this.racine;
 
 		while (courant != null){
-			int	order = compare(element, courant.valeur);
+			int	order = this.cmp.compare(element, courant.valeur);
 			if (order == 0){
 				return true;
 			}
@@ -132,7 +134,7 @@ public class ABR<E> extends AbstractCollection<E>{
 		Noeud courant = racine;
 
 		while (courant != null) {
-			int order = compare(element, courant.valeur);
+			int order = this.cmp.compare(element, courant.valeur);
 			if (order == 0) break;
 			if (order < 0) courant = courant.gauche; else courant = courant.droit;
 		}
@@ -165,13 +167,13 @@ public class ABR<E> extends AbstractCollection<E>{
 		return this.taille;
 	}
 
-	@SuppressWarnings("unchecked")
-	public int	compare(E element1, E element2){
-		if (this.cmp != null){
-			return (cmp.compare(element1, element2));
-		}
-		return ((Comparable<? super E>) element1).compareTo(element2);
-	}
+	// @SuppressWarnings("unchecked")
+	// public int	compare(E element1, E element2){
+	// 	if (this.cmp != null){
+	// 		return (cmp.compare(element1, element2));
+	// 	}
+	// 	return ((Comparable<? super E>) element1).compareTo(element2);
+	// }
 
 	@Override
 	public Iterator<E> iterator(){
@@ -197,10 +199,12 @@ public class ABR<E> extends AbstractCollection<E>{
 			dernier_retournee = null;
 		}
 
+		@Override
 		public boolean hasNext(){
 			return prochain != null;
 		}
 
+		@Override
 		public E next(){
 			if (prochain != null){
 				dernier_retournee = prochain;
@@ -210,6 +214,7 @@ public class ABR<E> extends AbstractCollection<E>{
 			return null;
 		}
 
+		@Override
 		public void remove(){
 			ABR.this.remove(dernier_retournee.valeur);
 			dernier_retournee = null;
