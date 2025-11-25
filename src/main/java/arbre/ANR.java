@@ -23,7 +23,7 @@ public class ANR<E> extends AbstractCollection<E>{
 			this.valeur = valeur;
 			this.droit = feuillNoeud;
 			this.gauche = feuillNoeud;
-			this.pere = null;
+			this.pere = feuillNoeud;
 			this.couleur = ROUGE;
 		}
 
@@ -32,7 +32,7 @@ public class ANR<E> extends AbstractCollection<E>{
 			this.valeur = null;
 			this.droit = this;
 			this.gauche = this;
-			this.pere = null;
+			this.pere = this;
 			this.couleur = NOIR;
 		}
 
@@ -50,7 +50,7 @@ public class ANR<E> extends AbstractCollection<E>{
 
 			Noeud	p = this.pere;
 			Noeud	enfant = this;
-			while(p != null && enfant == p.droit){
+			while(p != feuillNoeud && enfant == p.droit){
 				enfant = p;
 				p = p.pere;
 			}
@@ -63,15 +63,17 @@ public class ANR<E> extends AbstractCollection<E>{
 		this.racine = new Noeud(valeur);
 		this.racine.couleur = NOIR;
 		this.taille = 1;
+		this.cmp = (e1, e2)->((Comparable<E>)e1).compareTo(e2);
 	}
 
 	public ANR(){
 		this.feuillNoeud = new Noeud();
 		this.racine = this.feuillNoeud;
 		this.taille = 0;
+		this.cmp = (e1, e2)->((Comparable<E>)e1).compareTo(e2);
 	}
 
-	public ANR(Comparator<? super E> cmp){
+	public ANR(Comparator<E> cmp){
 		this.feuillNoeud = new Noeud();
 		this.racine = this.feuillNoeud;
 		this.taille = 0;
@@ -138,7 +140,7 @@ public class ANR<E> extends AbstractCollection<E>{
 		if (filsDroit.gauche != this.feuillNoeud)
 			filsDroit.gauche.pere = courant;
 		filsDroit.pere = courant.pere;
-		if (courant.pere == null)
+		if (courant.pere == this.feuillNoeud)
 		{
 			this.racine = filsDroit;
 		}else if (courant.pere.gauche == courant)
@@ -159,7 +161,7 @@ public class ANR<E> extends AbstractCollection<E>{
 		if (filsGauche.droit != this.feuillNoeud)
 			filsGauche.droit.pere = courant;
 		filsGauche.pere = courant.pere;
-		if (courant.pere == null)
+		if (courant.pere == this.feuillNoeud)
 		{
 			this.racine = filsGauche;
 		}else if (courant.pere.gauche == courant)
@@ -186,7 +188,7 @@ public class ANR<E> extends AbstractCollection<E>{
 
 		Noeud courant = this.racine;
 		while (true) {
-			int order = compare(nouvelle_valeur, courant.valeur);
+			int order = this.cmp.compare(nouvelle_valeur, courant.valeur);
 			if (order == 0){
 				return false;
 			}
@@ -199,7 +201,7 @@ public class ANR<E> extends AbstractCollection<E>{
 				}
 				courant = courant.droit;
 			}
-			else if (order < 0) {
+			else {
 				if (courant.gauche == this.feuillNoeud){
 					courant.gauche = new_noeud;
 					new_noeud.pere = courant;
@@ -207,9 +209,6 @@ public class ANR<E> extends AbstractCollection<E>{
 					return true;
 				}
 				courant = courant.gauche;
-			}
-			else{
-				return false;
 			}
 		}
 	}
@@ -221,7 +220,7 @@ public class ANR<E> extends AbstractCollection<E>{
 		Noeud courant = this.racine;
 
 		while (courant != this.feuillNoeud){
-			int	order = compare(element, courant.valeur);
+			int	order = this.cmp.compare(element, courant.valeur);
 			if (order == 0){
 				return true;
 			}
@@ -242,7 +241,7 @@ public class ANR<E> extends AbstractCollection<E>{
 		Noeud courant = racine;
 
 		while (courant != this.feuillNoeud) {
-			int order = compare(element, courant.valeur);
+			int order = this.cmp.compare(element, courant.valeur);
 			if (order == 0) break;
 			if (order < 0) courant = courant.gauche; else courant = courant.droit;
 		}
@@ -274,14 +273,6 @@ public class ANR<E> extends AbstractCollection<E>{
 		return this.taille;
 	}
 
-	@SuppressWarnings("unchecked")
-	public int	compare(E element1, E element2){
-		if (this.cmp != null){
-			return (cmp.compare(element1, element2));
-		}
-		return ((Comparable<? super E>) element1).compareTo(element2);
-	}
-
 	@Override
 	public Iterator<E> iterator(){
 		return new ANRIterator();
@@ -298,22 +289,22 @@ public class ANR<E> extends AbstractCollection<E>{
 		private Noeud dernier_retournee;
 
 		public	ANRIterator() {
-			if (racine != null) {
+			if (racine != feuillNoeud) {
 				prochain = racine.minimum();
 			} else {
-				prochain = null;
+				prochain = feuillNoeud;
 			}
-			dernier_retournee = null;
+			dernier_retournee = feuillNoeud;
 		}
 
 		@Override
 		public boolean	hasNext(){
-			return prochain != null;
+			return prochain != feuillNoeud;
 		}
 
 		@Override
 		public E	next(){
-			if (prochain != null){
+			if (prochain != feuillNoeud){
 				dernier_retournee = prochain;
 				prochain = prochain.suivant();
 				return dernier_retournee.valeur;
