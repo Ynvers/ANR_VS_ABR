@@ -23,7 +23,7 @@ public class ANR<E> extends AbstractCollection<E>{
 			this.valeur = valeur;
 			this.droit = feuillNoeud;
 			this.gauche = feuillNoeud;
-			this.pere = feuillNoeud;
+			this.pere = null;
 			this.couleur = ROUGE;
 		}
 
@@ -32,7 +32,7 @@ public class ANR<E> extends AbstractCollection<E>{
 			this.valeur = null;
 			this.droit = this;
 			this.gauche = this;
-			this.pere = this;
+			this.pere = null;
 			this.couleur = NOIR;
 		}
 
@@ -50,7 +50,7 @@ public class ANR<E> extends AbstractCollection<E>{
 
 			Noeud	p = this.pere;
 			Noeud	enfant = this;
-			while(p != feuillNoeud && enfant == p.droit){
+			while(p != null && enfant == p.droit){
 				enfant = p;
 				p = p.pere;
 			}
@@ -176,6 +176,48 @@ public class ANR<E> extends AbstractCollection<E>{
 		return true;
 	}
 
+	private void	rotationGauche(Noeud courant)
+	{
+		Noeud filsDroit = courant.droit;
+		courant.droit = filsDroit.gauche;
+
+		if (filsDroit.gauche != this.feuillNoeud)
+			filsDroit.gauche.pere = courant;
+		filsDroit.pere = courant.pere;
+		if (courant.pere == null)
+		{
+			this.racine = filsDroit;
+		}else if (courant.pere.gauche == courant)
+		{
+			courant.pere.gauche = filsDroit;
+		}else{
+			courant.pere.droit = filsDroit;
+		}
+		filsDroit.gauche = courant;
+		courant.pere = filsDroit;
+	}
+
+	private void	rotationDroite(Noeud courant)
+	{
+		Noeud filsGauche = courant.gauche;
+		courant.gauche = filsGauche.droit;
+
+		if (filsGauche.droit != this.feuillNoeud)
+			filsGauche.droit.pere = courant;
+		filsGauche.pere = courant.pere;
+		if (courant.pere == null)
+		{
+			this.racine = filsGauche;
+		}else if (courant.pere.gauche == courant)
+		{
+			courant.pere.gauche = filsGauche;
+		}else{
+			courant.pere.droit = filsGauche;
+		}
+		filsGauche.droit = courant;
+		courant.pere = filsGauche;
+	}
+
 	public int	get_taille(){
 		return this.taille;
 	}
@@ -203,7 +245,7 @@ public class ANR<E> extends AbstractCollection<E>{
 		private Noeud prochain;
 		private Noeud dernier_retournee;
 
-		public ANRIterator() {
+		public	ANRIterator() {
 			if (racine != null) {
 				prochain = racine.minimum();
 			} else {
@@ -212,11 +254,11 @@ public class ANR<E> extends AbstractCollection<E>{
 			dernier_retournee = null;
 		}
 
-		public boolean hasNext(){
+		public boolean	hasNext(){
 			return prochain != null;
 		}
 
-		public E next(){
+		public E	next(){
 			if (prochain != null){
 				dernier_retournee = prochain;
 				prochain = prochain.suivant();
@@ -225,20 +267,20 @@ public class ANR<E> extends AbstractCollection<E>{
 			return null;
 		}
 
-		public void remove(){
+		public void	remove(){
 			ANR.this.remove(dernier_retournee.valeur);
 			dernier_retournee = null;
 		}
 	}
 
 	@Override
-	public String toString() {
+	public String	toString() {
 		StringBuffer buf = new StringBuffer();
 		toString(racine, buf, "", maxStrLen(racine));
 		return buf.toString();
 	}
 
-	private void toString(Noeud x, StringBuffer buf, String path, int len) {
+	private void	toString(Noeud x, StringBuffer buf, String path, int len) {
 		if (x == feuillNoeud)
 			return;
 		toString(x.droit, buf, path + "D", len);
@@ -254,7 +296,7 @@ public class ANR<E> extends AbstractCollection<E>{
 		}
 		buf.append("-- " + x.valeur.toString() + (x.couleur == ROUGE ? "(R)" : "(N)") );
 		if (x.gauche != feuillNoeud || x.droit != feuillNoeud) {
-			buf.append(" --");
+			// buf.append(" --");
 			for (int j = x.valeur.toString().length(); j < len; j++)
 				buf.append('-');
 			buf.append('|');
@@ -263,7 +305,7 @@ public class ANR<E> extends AbstractCollection<E>{
 		toString(x.gauche, buf, path + "G", len);
 	}
 
-	private int maxStrLen(Noeud x) {
+	private int	maxStrLen(Noeud x) {
 		return x == feuillNoeud ? 0 : Math.max(x.valeur.toString().length(),
 				Math.max(maxStrLen(x.gauche), maxStrLen(x.droit)));
 	}

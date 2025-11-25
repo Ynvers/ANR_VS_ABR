@@ -21,6 +21,11 @@ public class App {
 		System.out.println(arbre_entier);
 
 		ANR<Integer> rouge_noir = new ANR<>(10);
+		rouge_noir.add(30);
+		rouge_noir.add(70);
+		rouge_noir.add(20);
+		rouge_noir.add(40);
+		rouge_noir.add(60);
 		System.out.println(rouge_noir);
 	}
 }
