@@ -46,12 +46,14 @@ public class ABR<E> extends AbstractCollection<E>{
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public ABR(E valeur){
 		this.racine = new Noeud(valeur);
 		this.taille = 1;
 		this.cmp = (e1, e2)->((Comparable<E>)e1).compareTo(e2);
 	}
 
+	@SuppressWarnings("unchecked")
 	public ABR(){
 		this.racine = null;
 		this.taille = 0;
@@ -166,14 +168,6 @@ public class ABR<E> extends AbstractCollection<E>{
 	public int	get_taille(){
 		return this.taille;
 	}
-
-	// @SuppressWarnings("unchecked")
-	// public int	compare(E element1, E element2){
-	// 	if (this.cmp != null){
-	// 		return (cmp.compare(element1, element2));
-	// 	}
-	// 	return ((Comparable<? super E>) element1).compareTo(element2);
-	// }
 
 	@Override
 	public Iterator<E> iterator(){

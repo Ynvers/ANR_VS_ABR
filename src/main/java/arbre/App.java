@@ -27,6 +27,8 @@ System.out.println("============Debut des test============");
 		rouge_noir.add(4);
 		rouge_noir.add(5);
 		rouge_noir.add(6);
+		rouge_noir.remove(2);
+		rouge_noir.add(7);
 		System.out.println(rouge_noir);
 	}
 }

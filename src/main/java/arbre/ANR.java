@@ -62,7 +62,8 @@ public class ANR<E> extends AbstractCollection<E> {
         }
     }
 
-    public ANR(E valeur) {
+    @SuppressWarnings("unchecked")
+	public ANR(E valeur) {
         this.feuillNoeud = new Noeud();
         this.racine = new Noeud(valeur);
         this.racine.couleur = NOIR;
@@ -70,7 +71,8 @@ public class ANR<E> extends AbstractCollection<E> {
         this.cmp = (e1, e2) -> ((Comparable<E>) e1).compareTo(e2);
     }
 
-    public ANR() {
+    @SuppressWarnings("unchecked")
+	public ANR() {
         this.feuillNoeud = new Noeud();
         this.racine = this.feuillNoeud;
         this.taille = 0;
@@ -122,6 +124,76 @@ public class ANR<E> extends AbstractCollection<E> {
         }
         this.racine.couleur = NOIR;
     }
+
+	private void	supprmierCorrection(Noeud enfantNoeud)
+	{
+		while (enfantNoeud != this.racine && enfantNoeud.couleur == NOIR)
+		{
+			if (enfantNoeud == enfantNoeud.pere.gauche)
+			{
+				Noeud	enfantFrere = enfantNoeud.pere.droit;
+				if (enfantFrere.couleur == ROUGE)
+				{
+					enfantFrere.couleur = NOIR;
+					enfantNoeud.couleur = ROUGE;
+					rotationGauche((enfantNoeud.pere));
+					enfantFrere = enfantNoeud.pere.droit;
+				}
+				if (enfantFrere.gauche.couleur == NOIR && enfantFrere.droit.couleur == NOIR)
+				{
+					enfantFrere.couleur = ROUGE;
+					enfantNoeud = enfantNoeud.pere;
+				}
+				else
+				{
+					if (enfantFrere.droit.couleur == NOIR)
+					{
+						enfantFrere.gauche.couleur = NOIR;
+						enfantFrere.couleur = ROUGE;
+						rotationDroite(enfantFrere);
+						enfantFrere = enfantNoeud.pere.droit;
+					}
+					enfantFrere.couleur = enfantNoeud.pere.couleur;
+					enfantNoeud.pere.couleur = NOIR;
+					enfantFrere.droit.couleur = NOIR;
+					rotationGauche(enfantNoeud.pere);
+					enfantNoeud = this.racine;
+				}
+			}
+			else
+			{
+				Noeud enfantFrere = enfantNoeud.pere.gauche;
+				if (enfantFrere.couleur == ROUGE)
+				{
+					enfantFrere.couleur = NOIR;
+					enfantNoeud.pere.couleur = ROUGE;
+					rotationDroite(enfantNoeud.pere);
+					enfantFrere = enfantNoeud.pere.gauche;
+				}
+				if (enfantFrere.droit.couleur == NOIR && enfantFrere.gauche.couleur == NOIR)
+				{
+					enfantFrere.couleur = ROUGE;
+					enfantNoeud = enfantNoeud.pere;
+				}
+				else
+				{
+					if (enfantFrere.gauche.couleur == NOIR)
+					{
+						enfantFrere.droit.couleur = NOIR;
+						enfantFrere.couleur = ROUGE;
+						rotationGauche(enfantFrere);
+						enfantFrere = enfantNoeud.pere.gauche;
+					}
+					enfantFrere.couleur = enfantNoeud.pere.couleur;
+					enfantNoeud.pere.couleur = NOIR;
+					enfantFrere.gauche.couleur = NOIR;
+					rotationDroite(enfantNoeud.pere);
+					enfantNoeud = this.racine;
+				}
+			}
+		}
+		enfantNoeud.couleur = NOIR;
+	}
 
     private void rotationGauche(Noeud courant) {
         Noeud filsDroit = courant.droit;
@@ -256,7 +328,7 @@ public class ANR<E> extends AbstractCollection<E> {
         } else {
             courant.pere.droit = child;
         }
-
+		supprmierCorrection(child);
         taille--;
         return true;
     }
