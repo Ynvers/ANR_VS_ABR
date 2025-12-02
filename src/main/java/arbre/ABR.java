@@ -9,6 +9,7 @@ public class ABR<E> extends AbstractCollection<E>{
 	private int	taille;
 	private final	Comparator<? super E> cmp;
 
+	// Classe interne pour la gestionn des noeuds de l'arbre
 	private class Noeud {
 		E valeur;
 		Noeud gauche;
@@ -172,6 +173,29 @@ public class ABR<E> extends AbstractCollection<E>{
 	@Override
 	public Iterator<E> iterator(){
 		return new ABRIterator();
+	}
+
+	/* retourne la valeur minimale (ou null si vide) */
+	public E min() {
+		return racine == null ? null : racine.minimum().valeur;
+	}
+
+	/* retourne la valeur maximale (ou null si vide) */
+	public E max() {
+		if (racine == null) return null;
+		Noeud cur = racine;
+		while (cur.droit != null) cur = cur.droit;
+		return cur.valeur;
+	}
+
+	/* hauteur: arbre vide -> 0, feuille -> 1 */
+	public int hauteur() {
+		return hauteur(racine);
+	}
+
+	private int hauteur(Noeud x) {
+		if (x == null) return 0;
+		return 1 + Math.max(hauteur(x.gauche), hauteur(x.droit));
 	}
 
 	@Override
