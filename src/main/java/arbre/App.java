@@ -15,7 +15,7 @@ public class App {
 		arbre_entier.add(35);
 		arbre_entier.add(25);
 		System.out.println(arbre_entier);
-		System.out.println(arbre_entier.get_taille());
+		System.out.println(arbre_entier.size());
 		System.out.println(arbre_entier.contains(10));
 		arbre_entier.remove(50);
 		System.out.println(arbre_entier);

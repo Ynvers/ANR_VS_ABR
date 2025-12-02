@@ -5,9 +5,9 @@ import java.util.Comparator;
 import java.util.Iterator;
 
 public class ABR<E> extends AbstractCollection<E>{
-	private Noeud racine;
-	private int	taille;
-	private final	Comparator<? super E> cmp;
+	private Noeud				racine;
+	private int					taille;
+	private final Comparator<E>	cmp;
 
 	// Classe interne pour la gestionn des noeuds de l'arbre
 	private class Noeud {
@@ -61,7 +61,7 @@ public class ABR<E> extends AbstractCollection<E>{
 		this.cmp = (e1, e2)->((Comparable<E>)e1).compareTo(e2);
 	}
 
-	public ABR(Comparator<? super E> cmp){
+	public ABR(Comparator<E> cmp){
 		this.racine = null;
 		this.taille = 0;
 		this.cmp = cmp;
@@ -112,7 +112,6 @@ public class ABR<E> extends AbstractCollection<E>{
 	@SuppressWarnings("unchecked")
 	public boolean	contains(Object obj){
 		E element = (E) obj;
-		// Noeud new_noeud = new Noeud((E) obj);
 		Noeud courant = this.racine;
 
 		while (courant != null){
@@ -166,21 +165,17 @@ public class ABR<E> extends AbstractCollection<E>{
 		return true;
 	}
 
-	public int	get_taille(){
-		return this.taille;
-	}
-
 	@Override
 	public Iterator<E> iterator(){
 		return new ABRIterator();
 	}
 
-	/* retourne la valeur minimale (ou null si vide) */
+	// retourne la valeur minimale (ou null si vide)
 	public E min() {
 		return racine == null ? null : racine.minimum().valeur;
 	}
 
-	/* retourne la valeur maximale (ou null si vide) */
+	// retourne la valeur maximale (ou null si vide)
 	public E max() {
 		if (racine == null) return null;
 		Noeud cur = racine;
@@ -188,7 +183,7 @@ public class ABR<E> extends AbstractCollection<E>{
 		return cur.valeur;
 	}
 
-	/* hauteur: arbre vide -> 0, feuille -> 1 */
+	// hauteur: arbre vide -> 0, feuille -> 1
 	public int hauteur() {
 		return hauteur(racine);
 	}

@@ -255,6 +255,7 @@ public class ANR<E> extends AbstractCollection<E> {
 				if (courant.droit == this.feuillNoeud) {
 					courant.droit = new_noeud;
 					new_noeud.pere = courant;
+					this.taille++;
 					ajouterCorrection(new_noeud);
 					return true;
 				}
@@ -263,6 +264,7 @@ public class ANR<E> extends AbstractCollection<E> {
 				if (courant.gauche == this.feuillNoeud) {
 					courant.gauche = new_noeud;
 					new_noeud.pere = courant;
+					this.taille++;
 					ajouterCorrection(new_noeud);
 					return true;
 				}
