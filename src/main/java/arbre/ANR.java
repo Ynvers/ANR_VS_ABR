@@ -371,16 +371,17 @@ public class ANR<E> extends AbstractCollection<E> {
 
 		@Override
 		public E next() {
-			if (prochain != feuillNoeud) {
-				dernier_retournee = prochain;
-				prochain = prochain.suivant();
-				return dernier_retournee.valeur;
+			if (prochain == feuillNoeud) {
+				return null;
 			}
-			return null;
+			dernier_retournee = prochain;
+			prochain = prochain.suivant();
+			return dernier_retournee.valeur;
 		}
 
 		@Override
 		public void remove() {
+			if (dernier_retournee == null || dernier_retournee == feuillNoeud) return;
 			ANR.this.remove(dernier_retournee.valeur);
 			dernier_retournee = feuillNoeud;
 		}

@@ -229,6 +229,8 @@ public class ABR<E> extends AbstractCollection<E>{
 
 		@Override
 		public void remove(){
+			// Si next() n'a pas été appelé, on ignore silencieusement l'appel.
+			if (dernier_retournee == null) return;
 			ABR.this.remove(dernier_retournee.valeur);
 			dernier_retournee = null;
 		}
