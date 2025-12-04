@@ -1,6 +1,7 @@
 package arbre;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -34,7 +35,27 @@ public class ABRTest {
 
 	@Test
 	void testremove(){
+		ABR<Integer> abr = new ABR<>();
+		abr.add(10);
+		abr.add(7);
+		abr.add(5);
+		abr.add(15);
+		abr.add(1);
 
+		// suppression feuille
+		assertTrue(abr.remove(1));
+		assertFalse(abr.contains(1));
+		assertEquals(4, abr.size());
+
+		// suppression noeud avec un enfant (racine)
+		assertTrue(abr.remove(7));
+		assertFalse(abr.contains(7));
+		assertEquals(3, abr.size());
+
+		// suppression noeud avec deux enfants (racine)
+		assertTrue(abr.remove(10));
+		assertFalse(abr.contains(10));
+		assertEquals(2, abr.size());
 	}
 	
 	@Test
@@ -55,5 +76,4 @@ public class ABRTest {
 		assertTrue(txt.contains("2"));
 		assertTrue(txt.contains("35"));
 	}
-
 }
