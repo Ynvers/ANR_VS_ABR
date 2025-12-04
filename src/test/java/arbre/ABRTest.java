@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Iterator;
 import org.junit.jupiter.api.Test;
 
 public class ABRTest {
@@ -151,7 +152,56 @@ public class ABRTest {
 		assertEquals(3, abr.hauteur());
 	}
 
+	@Test
+	void	testiterator()
+	{
+		ABR<Integer> abr = new ABR<>();
+		Iterator<Integer> it;
 	
+		// cas 1 : arbre vide
+		it = abr.iterator();
+		assertFalse(it.hasNext());
+		assertNull(it.next());
+
+		// cas 2 : abre simple
+		abr.add(50);
+		abr.add(25);
+		abr.add(75);
+		abr.add(10);
+		abr.add(90);
+		abr.add(30);
+		it = abr.iterator();
+		assertTrue(it.hasNext());
+		assertEquals(10, it.next());
+		assertEquals(25, it.next());
+		assertEquals(30, it.next());
+		assertEquals(50, it.next());
+		assertEquals(75, it.next());
+		assertEquals(90, it.next());
+		assertFalse(it.hasNext());
+		assertNull(it.next());
+
+		// cas 3 : test de remove
+		abr = new ABR<>();
+		abr.add(20);
+		abr.add(10);
+		abr.add(30);
+		it = abr.iterator();
+
+		// 3.a : remove avant next
+		it.remove();
+		assertEquals(3, abr.size());
+
+		// 3.b : remove accepte
+		assertEquals(10, it.next());
+		it.remove();
+		assertEquals(2, abr.size());
+		assertFalse(abr.contains(10));
+
+		// 3.c : double appel;
+		it.remove(); 
+		assertEquals(2, abr.size());
+	}
 
 	@Test
 	void testToString() {
