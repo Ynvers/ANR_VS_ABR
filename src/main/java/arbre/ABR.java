@@ -174,7 +174,8 @@ public class ABR<E> extends AbstractCollection<E>{
 
 	// retourne la valeur maximale (ou null si vide)
 	public E max() {
-		if (racine == null) return null;
+		if (racine == null) 
+			return null;
 		Noeud cur = racine;
 		while (cur.droit != null) cur = cur.droit;
 		return cur.valeur;
@@ -194,6 +195,10 @@ public class ABR<E> extends AbstractCollection<E>{
 	public int	size()
 	{
 		return taille;
+	}
+
+	public E	getracine(){
+		return this.racine.valeur;
 	}
 
 	private class ABRIterator implements Iterator<E>{

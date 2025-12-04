@@ -36,28 +36,94 @@ public class ABRTest {
 	@Test
 	void testremove(){
 		ABR<Integer> abr = new ABR<>();
+
+		//cas 1 : suppresion d'un arbre vide
+		assertFalse(abr.remove(10), "L'arbre est vide");
+
+		//cas 2 : suppression de la racine
+		
+		// 2.a racine sans enfant)
 		abr.add(10);
+		assertTrue(abr.remove(10));
+		assertEquals(0, abr.size());
+
+		// 2.b Racine avec enfant droit uniquement 
+		abr.add(10);
+		abr.add(20); 
+		assertTrue(abr.remove(10));
+		assertTrue(abr.contains(20));
+		assertEquals(1, abr.size());
+		
+		// 2.c Racine avec enfant gauche uniquement
+		abr = new ABR<>(); // Reset
+		abr.add(10);
+		abr.add(5);
+		assertTrue(abr.remove(10));
+		assertTrue(abr.contains(5));
+
+		// cas 3 : Noeuds internes
+		abr = new ABR<>(50);
+		abr.add(30);
+		abr.add(70);
+		abr.add(20);
+		abr.add(40);
+		abr.add(80);
+
+		// 3.a Suppression élément inexistant dans un arbre non vide
+		assertFalse(abr.remove(99));
+
+		// 3.b Suppression feuille enfant gauche
+		assertTrue(abr.remove(20));
+		assertFalse(abr.contains(20));
+
+		// 3.c Suppression feuille enfant droit
+		assertTrue(abr.remove(80)); 
+		assertFalse(abr.contains(80));
+
+		// 3.d Suppression noeud interne avec 1 enfant 
+		abr.add(60); 
+		assertTrue(abr.remove(70)); 
+		assertTrue(abr.contains(60));
+
+		// 3.e Suppression noeud avec 2 enfants (racine)
+		assertTrue(abr.remove(50));
+		assertFalse(abr.contains(50));
+		assertTrue(abr.contains(30));
+		assertEquals(60, abr.getracine());;
+		}
+	
+	@Test
+	void testmax(){
+		// cas normal
+		ABR<Integer> abr = new ABR<>();
 		abr.add(7);
 		abr.add(5);
 		abr.add(15);
 		abr.add(1);
+		assertEquals(15, abr.max());
 
-		// suppression feuille
-		assertTrue(abr.remove(1));
-		assertFalse(abr.contains(1));
-		assertEquals(4, abr.size());
-
-		// suppression noeud avec un enfant (racine)
-		assertTrue(abr.remove(7));
-		assertFalse(abr.contains(7));
-		assertEquals(3, abr.size());
-
-		// suppression noeud avec deux enfants (racine)
-		assertTrue(abr.remove(10));
-		assertFalse(abr.contains(10));
-		assertEquals(2, abr.size());
+		// Cas arbre vide
+		ABR<Integer> abr2 = new ABR<>();
+		assertEquals(null, abr2.max());
 	}
+
+	@Test
+	void testmin(){
+		// cas normal
+		ABR<Integer> abr = new ABR<>();
+		abr.add(7);
+		abr.add(5);
+		abr.add(15);
+		abr.add(1);
+		assertEquals(1, abr.min());
+
+		// Cas arbre vide
+		ABR<Integer> abr2 = new ABR<>();
+		assertEquals(null, abr2.min());
+	}
+
 	
+
 	@Test
 	void testToString() {
 		ABR<Integer> abr = new ABR<>(Integer::compareTo);
