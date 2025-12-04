@@ -93,7 +93,7 @@ public class ABR<E> extends AbstractCollection<E>{
 				}
 				courant = courant.droit;
 			}
-			else if (order < 0) {
+			else{
 				if (courant.gauche == null){
 					courant.gauche = new_noeud;
 					new_noeud.pere = courant;
@@ -101,9 +101,6 @@ public class ABR<E> extends AbstractCollection<E>{
 					return true;
 				}
 				courant = courant.gauche;
-			}
-			else{
-				return false;
 			}
 		}
 	}
