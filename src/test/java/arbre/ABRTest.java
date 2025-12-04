@@ -92,7 +92,7 @@ public class ABRTest {
 		assertFalse(abr.contains(50));
 		assertTrue(abr.contains(30));
 		assertEquals(60, abr.getracine());;
-		}
+	}
 	
 	@Test
 	void testmax(){

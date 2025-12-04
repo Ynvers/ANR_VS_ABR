@@ -441,15 +441,9 @@ public class ANR<E> extends AbstractCollection<E> {
 		return cur.valeur;
 	}
 
-	public int hauteur() {
-		return hauteur(racine);
+	public E	getracine(){
+		return this.racine.valeur;
 	}
-
-	private int hauteur(Noeud x) {
-		if (x == feuillNoeud) return 0;
-		return 1 + Math.max(hauteur(x.gauche), hauteur(x.droit));
-	}
-
 
 	/**
 	 * Hauteur noire (black-height) : nombre de noeuds noirs rencontrés
