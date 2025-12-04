@@ -3,6 +3,7 @@ package arbre;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -120,6 +121,34 @@ public class ABRTest {
 		// Cas arbre vide
 		ABR<Integer> abr2 = new ABR<>();
 		assertEquals(null, abr2.min());
+	}
+
+	@Test
+	void testhauteur(){
+		ABR<Integer> abr = new ABR<>();
+
+		// cas 1 : arbre vide 
+		assertEquals(0, abr.hauteur());
+		
+		// cas 2 : racine seule
+		abr.add(10);
+		assertEquals(1, abr.hauteur());
+		
+		// cas 3 : noeud interne
+		// 3.a : arbez un pzu equilibree
+		abr = new ABR<>();
+    	abr.add(7);
+		abr.add(5);
+		abr.add(15);
+		abr.add(1);
+		assertEquals(3, abr.hauteur());
+
+		// 3.b : arbre desequilibre
+		abr = new ABR<>();
+		abr.add(1);
+		abr.add(2);
+		abr.add(3);
+		assertEquals(3, abr.hauteur());
 	}
 
 	
