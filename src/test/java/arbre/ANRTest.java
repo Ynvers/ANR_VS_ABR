@@ -153,7 +153,17 @@ public class ANRTest {
 
 	@Test
 	void	testsupprimerCorrection(){
+		ANR<Integer> anr = new ANR<>();
 		
+		// cas 1 : le frere est rouge : 
+		anr.add(7);
+		anr.add(5);
+		anr.add(15);
+		anr.add(1);
+		anr.add(6);
+		anr.add(0);
+		anr.add(50);
+		anr.remove(15);
 	}
 
 	@Test

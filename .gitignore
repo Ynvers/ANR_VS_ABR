@@ -5,3 +5,6 @@ target/
 bin/
 .settings/
 .project
+
+# Environnements virtuel
+venv/
