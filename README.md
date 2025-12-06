@@ -73,4 +73,4 @@ Le script génère 4 graphiques comparatifs :
 
 ## 📝 Auteur
 
-Projet réalisé dans le cadre d'une étude sur les structures de données arborescentes par [Nathan ADOHO](`https://github.com/Ynvers`)
+Projet réalisé dans le cadre d'une étude sur les structures de données arborescentes par [Nathan ADOHO](https://github.com/Ynvers)
