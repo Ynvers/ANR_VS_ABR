@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Random;
 
 public class BenchmarkABRvsANR {
-	private static final int[] TAILLES = {1000, 2500, 5000, 7500, 10000, 15000, 20000};
+	private static final int[] TAILLES = {1000, 2500, 5000, 7500, 10000, 15000, 20000, 50000, 100000};
 
 	public static void	main(String[] args) throws IOException{
 		System.out.println("Début de l'étude expérimentale...");
@@ -33,31 +33,59 @@ public class BenchmarkABRvsANR {
 				long tempsDebut = System.nanoTime();
 				for (Integer val : donneesAleatoires)
 					abrAleatoire.add(val);
-				long abrtempsDeConstruction = System.nanoTime() - tempsDebut;
+				long abrtempsDeConstructionAl = System.nanoTime() - tempsDebut;
 
 				// ARN Aléatoire
 				ANR<Integer> anrAleatoire = new ANR<>();
 				tempsDebut = System.nanoTime();
 				for (Integer val : donneesAleatoires)
 					anrAleatoire.add(val);
-				long anrtempsDeConstruction = System.nanoTime() - tempsDebut;
+				long anrtempsDeConstructionAl = System.nanoTime() - tempsDebut;
 
 				// Recherche Aléatoire (0 à 2n-1)
 				tempsDebut = System.nanoTime();
 				for (int i = 0; i < 2 * n; i++)
 					abrAleatoire.contains(i);
-				long abrtempsRecherche = System.nanoTime() - tempsDebut;
+				long abrtempsRechercheAl = System.nanoTime() - tempsDebut;
 
 				tempsDebut = System.nanoTime();
 				for (int i = 0; i < 2 * n; i++)
 					anrAleatoire.contains(i);
-				long anrtempsRecherche = System.nanoTime() - tempsDebut;
+				long anrtempsRechercheAl = System.nanoTime() - tempsDebut;
+
+				// // Cas 2 : Les insertions dans l'ordre
+				// ABR Ordre
+				ABR<Integer> abrOrdre = new ABR<>();
+				tempsDebut = System.nanoTime();
+				for (Integer val : donneesTriees)
+					abrOrdre.add(val);
+				long abrtempsDeConstructionOd = System.nanoTime() - tempsDebut;
+
+				// ARN Ordre
+				ANR<Integer> anrOrdre = new ANR<>();
+				tempsDebut = System.nanoTime();
+				for (Integer val : donneesTriees)
+					anrOrdre.add(val);
+				long anrtempsDeConstructionOd = System.nanoTime() - tempsDebut;
+
+				// Recherche trié (0 à 2n-1)
+				tempsDebut = System.nanoTime();
+				for (int i = 0; i < 2 * n; i++)
+					abrOrdre.contains(i);
+				long abrtempsRechercheOd = System.nanoTime() - tempsDebut;
+
+				tempsDebut = System.nanoTime();
+				for (int i = 0; i < 2 * n; i++)
+					anrOrdre.contains(i);
+				long anrtempsRechercheOd = System.nanoTime() - tempsDebut;
 
 				// --- Écriture dans le CSV ---
-				String line = String.format("%d,%.3f,%.3f,%.3f,%.3f\n",
+				String line = String.format("%d,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f\n",
 								n,
-								abrtempsDeConstruction / 1e6, anrtempsDeConstruction / 1e6,
-								abrtempsRecherche / 1e6, anrtempsRecherche / 1e6
+								abrtempsDeConstructionAl / 1e6, anrtempsDeConstructionAl / 1e6,
+								abrtempsRechercheAl / 1e6, anrtempsRechercheAl / 1e6,
+								abrtempsDeConstructionOd / 1e6, anrtempsDeConstructionOd / 1e6,
+								abrtempsRechercheOd / 1e6, anrtempsRechercheOd / 1e6
 				);
 				resulsts.write(line);
 			}
