@@ -26,26 +26,26 @@ public class ANRTest {
 	}
 
 	@Test
-	void testremove(){
+	void testremove() {
 		ANR<Integer> aNr = new ANR<>();
 
-		//cas 1 : suppresion d'un arbre vide
+		// cas 1 : suppresion d'un arbre vide
 		assertFalse(aNr.remove(10), "L'arbre est vide");
 
-		//cas 2 : suppression de la racine
-		
+		// cas 2 : suppression de la racine
+
 		// 2.a racine sans enfant)
 		aNr.add(10);
 		assertTrue(aNr.remove(10));
 		assertEquals(0, aNr.size());
 
-		// 2.b Racine avec enfant droit uniquement 
+		// 2.b Racine avec enfant droit uniquement
 		aNr.add(10);
-		aNr.add(20); 
+		aNr.add(20);
 		assertTrue(aNr.remove(10));
 		assertTrue(aNr.contains(20));
 		assertEquals(1, aNr.size());
-		
+
 		// 2.c Racine avec enfant gauche uniquement
 		aNr = new ANR<>(); // Reset
 		aNr.add(10);
@@ -69,51 +69,51 @@ public class ANRTest {
 		assertFalse(aNr.contains(20));
 
 		// 3.c Suppression feuille enfant droit
-		assertTrue(aNr.remove(80)); 
+		assertTrue(aNr.remove(80));
 		assertFalse(aNr.contains(80));
 
-		// 3.d Suppression noeud interne avec 1 enfant 
-		aNr.add(60); 
-		assertTrue(aNr.remove(70)); 
+		// 3.d Suppression noeud interne avec 1 enfant
+		aNr.add(60);
+		assertTrue(aNr.remove(70));
 		assertTrue(aNr.contains(60));
 
 		// 3.e Suppression noeud avec 2 enfants (racine)
 		assertTrue(aNr.remove(50));
 		assertFalse(aNr.contains(50));
 		assertTrue(aNr.contains(30));
-		assertEquals(60, aNr.getracine());;
+		assertEquals(40, aNr.getracine());
 	}
 
 	@Test
 	void testget_taille() {
 		ANR<Integer> anr = new ANR<>();
-		
+
 		// Arbre vide
 		assertEquals(0, anr.get_taille());
-		
+
 		// Après ajouts
 		anr.add(20);
 		assertEquals(1, anr.get_taille());
-		
+
 		anr.add(10);
 		assertEquals(2, anr.get_taille());
-		
+
 		anr.add(30);
 		assertEquals(3, anr.get_taille());
-		
+
 		anr.add(5);
 		anr.add(15);
 		anr.add(25);
 		anr.add(35);
 		assertEquals(7, anr.get_taille());
-		
+
 		// Après suppressions
 		anr.remove(5);
 		assertEquals(6, anr.get_taille());
-		
+
 		anr.remove(35);
 		assertEquals(5, anr.get_taille());
-		
+
 		anr.remove(20);
 		assertEquals(4, anr.get_taille());
 	}
@@ -121,7 +121,7 @@ public class ANRTest {
 	@Test
 	void testAjouterCorrection() {
 		ANR<Integer> anr = new ANR<>();
-		
+
 		// Cas 1: Insertions simples avec recoloration
 		anr.add(50);
 		anr.add(25);
@@ -131,31 +131,31 @@ public class ANRTest {
 		anr.add(60);
 		anr.add(80);
 		assertEquals(7, anr.get_taille());
-		
+
 		// Cas 2: Insertions qui déclenchent des rotations (oncle noir)
 		anr.add(5);
 		anr.add(15);
 		anr.add(27);
 		anr.add(35);
 		assertEquals(11, anr.get_taille());
-		
+
 		// Vérifier que tous les éléments sont présents et accessibles
 		assertTrue(anr.contains(50));
 		assertTrue(anr.contains(25));
 		assertTrue(anr.contains(75));
 		assertTrue(anr.contains(5));
 		assertTrue(anr.contains(35));
-		
+
 		// Vérifier que la hauteur noire est cohérente
 		int blackHeight = anr.blackHeight();
 		assertTrue(blackHeight > 0);
 	}
 
 	@Test
-	void	testsupprimerCorrection(){
+	void testsupprimerCorrection() {
 		ANR<Integer> anr = new ANR<>();
-		
-		// cas 1 : le frere est rouge : 
+
+		// cas 1 : le frere est rouge :
 		anr.add(7);
 		anr.add(5);
 		anr.add(15);
@@ -167,7 +167,7 @@ public class ANRTest {
 	}
 
 	@Test
-	void testmax(){
+	void testmax() {
 		// cas normal
 		ANR<Integer> aNr = new ANR<>();
 		aNr.add(7);
@@ -181,10 +181,8 @@ public class ANRTest {
 		assertEquals(null, aNr2.max());
 	}
 
-	
-
 	@Test
-	void testmin(){
+	void testmin() {
 		// cas normal
 		ANR<Integer> abr = new ANR<>();
 		abr.add(7);
@@ -201,14 +199,15 @@ public class ANRTest {
 	@Test
 	void testRotationGauche() {
 		ANR<Integer> anr = new ANR<>();
-		
-		// cas 1: Insertion en ordre croissant pour forcer déséquilibre et rotations gauche
+
+		// cas 1: Insertion en ordre croissant pour forcer déséquilibre et rotations
+		// gauche
 		anr.add(10);
 		anr.add(20);
 		anr.add(30);
 		anr.add(40);
 		anr.add(50);
-		
+
 		// Cas 2: Rotation gauche avec enfant intermédiaire
 		anr = new ANR<>();
 		anr.add(10);
@@ -217,11 +216,11 @@ public class ANRTest {
 		anr.add(35);
 		anr.add(25);
 		assertEquals(5, anr.get_taille());
-		
-		for (int val : new int[]{10, 20, 25, 30, 35}) {
+
+		for (int val : new int[] { 10, 20, 25, 30, 35 }) {
 			assertTrue(anr.contains(val), "L'arbre doit contenir " + val);
 		}
-		
+
 		Iterator<Integer> iterator = anr.iterator();
 		Integer prev = null;
 		while (iterator.hasNext()) {
@@ -236,8 +235,9 @@ public class ANRTest {
 	@Test
 	void testRotationDroite() {
 		ANR<Integer> anr = new ANR<>();
-		
-		// Cas 1: Insertion en ordre décroissant pour forcer déséquilibre et rotations droite
+
+		// Cas 1: Insertion en ordre décroissant pour forcer déséquilibre et rotations
+		// droite
 		anr.add(50);
 		anr.add(40);
 		anr.add(30);
@@ -252,11 +252,11 @@ public class ANRTest {
 		anr.add(25);
 		anr.add(35);
 		assertEquals(5, anr.get_taille());
-		
-		for (int val : new int[]{35, 25, 30, 40, 50}) {
+
+		for (int val : new int[] { 35, 25, 30, 40, 50 }) {
 			assertTrue(anr.contains(val), "L'arbre doit contenir " + val);
 		}
-		
+
 		Iterator<Integer> iterator = anr.iterator();
 		Integer prev = null;
 		while (iterator.hasNext()) {
@@ -269,11 +269,10 @@ public class ANRTest {
 	}
 
 	@Test
-	void	testiterator()
-	{
+	void testiterator() {
 		ANR<Integer> aNr = new ANR<>();
 		Iterator<Integer> it;
-	
+
 		// cas 1 : arbre vide
 		it = aNr.iterator();
 		assertFalse(it.hasNext());
@@ -315,7 +314,7 @@ public class ANRTest {
 		assertFalse(aNr.contains(10));
 
 		// 3.c : double appel;
-		it.remove(); 
+		it.remove();
 		assertEquals(2, aNr.size());
 	}
 
@@ -336,5 +335,72 @@ public class ANRTest {
 		assertTrue(txt.contains("60"));
 		assertTrue(txt.contains("2"));
 		assertTrue(txt.contains("35"));
+	}
+
+	@Test
+	void testAdditionalSuppressionCases() {
+		ANR<Integer> anr;
+
+		// 1. Full Coverage : Insertions/Suppressions massives (1 à 100)
+		anr = new ANR<>();
+		int limit = 100;
+		for (int i = 1; i <= limit; i++) {
+			anr.add(i);
+		}
+		assertEquals(limit, anr.size());
+
+		// Suppression de 1 à 100 (côté gauche)
+		for (int i = 1; i <= limit; i++) {
+			assertTrue(anr.remove(i));
+			assertFalse(anr.contains(i));
+		}
+		assertEquals(0, anr.size());
+
+		// Suppression inverse (côté droit)
+		for (int i = 1; i <= limit; i++) {
+			anr.add(i);
+		}
+		for (int i = limit; i >= 1; i--) {
+			assertTrue(anr.remove(i));
+		}
+		assertEquals(0, anr.size());
+
+		// 2. Corner Cases (Inner Nephew Red)
+		// Left side: Sibling Black, Inner Nephew Red
+		anr = new ANR<>();
+		anr.add(30);
+		anr.add(10);
+		anr.add(50);
+		anr.add(40);
+		// Remove 10 -> fixup on left side
+		assertTrue(anr.remove(10));
+		assertEquals(3, anr.size());
+		assertTrue(anr.contains(40));
+
+		// Right side: Sibling Black, Inner Nephew Red
+		anr = new ANR<>();
+		anr.add(30);
+		anr.add(50);
+		anr.add(10);
+		anr.add(20);
+		// Remove 50 -> fixup on right side
+		assertTrue(anr.remove(50));
+		assertEquals(3, anr.size());
+		assertTrue(anr.contains(20));
+
+		// 3. Random Fuzzing
+		anr = new ANR<>();
+		int n = 1000;
+		java.util.Random rand = new java.util.Random(42);
+		for (int i = 0; i < n; i++) {
+			anr.add(rand.nextInt(n * 2));
+		}
+		for (int i = 0; i < n / 2; i++) {
+			int val = rand.nextInt(n * 2);
+			if (anr.contains(val)) {
+				anr.remove(val);
+			}
+		}
+		assertTrue(anr.size() >= 0);
 	}
 }
