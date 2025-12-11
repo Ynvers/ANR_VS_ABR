@@ -81,12 +81,13 @@ public class BenchmarkABRvsANR {
 				long anrtempsRechercheOd = System.nanoTime() - tempsDebut;
 
 				// --- Écriture dans le CSV ---
-				String line = String.format(Locale.US,"%d,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f\n",
-								n,
-								abrtempsDeConstructionAl / 1e6, anrtempsDeConstructionAl / 1e6,
-								abrtempsRechercheAl / 1e6, anrtempsRechercheAl / 1e6,
-								abrtempsDeConstructionOd / 1e6, anrtempsDeConstructionOd / 1e6,
-								abrtempsRechercheOd / 1e6, anrtempsRechercheOd / 1e6
+				String line = String.format(Locale.US,
+											"%d,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f\n",
+											n,
+											abrtempsDeConstructionAl / 1e6, anrtempsDeConstructionAl / 1e6,
+											abrtempsRechercheAl / 1e6, anrtempsRechercheAl / 1e6,
+											abrtempsDeConstructionOd / 1e6, anrtempsDeConstructionOd / 1e6,
+											abrtempsRechercheOd / 1e6, anrtempsRechercheOd / 1e6
 				);
 				resulsts.write(line);
 			}
