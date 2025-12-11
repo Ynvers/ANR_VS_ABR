@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 
 public class BenchmarkABRvsANR {
@@ -80,7 +81,7 @@ public class BenchmarkABRvsANR {
 				long anrtempsRechercheOd = System.nanoTime() - tempsDebut;
 
 				// --- Écriture dans le CSV ---
-				String line = String.format("%d,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f\n",
+				String line = String.format(Locale.US,"%d,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f\n",
 								n,
 								abrtempsDeConstructionAl / 1e6, anrtempsDeConstructionAl / 1e6,
 								abrtempsRechercheAl / 1e6, anrtempsRechercheAl / 1e6,
